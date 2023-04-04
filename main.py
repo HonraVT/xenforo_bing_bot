@@ -5,7 +5,7 @@ from time import sleep
 from edge_gpt import Chatbot, ConversationStyle
 from forum_scraper import ForumScraper
 from secret import URL, FORUM_COOKIE, BING_COOKIE, MAIN_PROMPT
-from utils import save_conf, add_period, remove_reference_simbols
+from utils import save_conf, add_period, remove_reference_symbols
 
 
 fs = ForumScraper(URL, FORUM_COOKIE, warning_mgs=True)
@@ -24,7 +24,7 @@ async def main(user_filter, main_prompt):
         print("thread:::", "\n\ttitulo: ", title, "\n\tmensagem: ", text)
         print("\n\n")
         if ai_response:
-            ai_response = remove_reference_simbols(ai_response)
+            ai_response = remove_reference_symbols(ai_response)
             print("ai_response raw:::", ai_response)
             sleep(20)
             fs.reply(thread_id, ai_response)
