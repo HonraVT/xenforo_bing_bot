@@ -24,7 +24,7 @@
 
 ## Configure o sub forum:
 
-Em ```secret.py``` adicione o endereço do sub forúm desejado.
+Em ```secret.py``` adicione o endereço do sub fórum desejado.
 
 
 
