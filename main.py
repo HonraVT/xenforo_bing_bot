@@ -21,7 +21,7 @@ async def main(user_filter, main_prompt):
         full_prompt = main_prompt + f"TITULO: {add_period(title)}\n\tMENSAGEM: {add_period(text)}"
         ai_response = await bing.ask(prompt=full_prompt, conversation_style=ConversationStyle.creative)
         await bing.reset()
-        print("thread:::", "\n\ttitulo: ", title, "\n\tmensagem: ", text)
+        print("thread:::", "\n\ttitle: ", title, "\n\tmessage: ", text)
         print("\n\n")
         if ai_response:
             ai_response = remove_reference_symbols(ai_response)
