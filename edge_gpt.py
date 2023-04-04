@@ -308,7 +308,6 @@ class ChatHub:
                     yield False, resp_text
                 elif response.get("type") == 2:
                     revoke = response["item"]["messages"][1]["contentOrigin"]
-                    print("REVOKE::::", revoke)
                     if revoke == "Apology":
                         warnings.warn("[!] Revoked response (2)")
                         final = True
