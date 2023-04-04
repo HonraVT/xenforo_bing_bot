@@ -14,7 +14,7 @@ bing = Chatbot(cookies=[{"name": "_U", "value": BING_COOKIE}], warning_mgs=True)
 
 async def main(user_filter, main_prompt):
     threads = fs.get_thread_data(user_filter)
-    print("a responder:", len(threads))
+    print("to reply:", len(threads))
 
     for thread in threads:
         nick, thread_id, title, text = thread.values()
