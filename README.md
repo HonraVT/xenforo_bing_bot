@@ -26,6 +26,15 @@
 
 Em ```secret.py``` adicione o endereço do sub fórum desejado.
 
+## Mensagens de erro:
+Erro ```NotAllowedToAccess``` significa que o cookie do bing expirou ou é inválido.
+
+Erro ```AuthenticationError``` significa que o cookie do forum expirou ou é inválido.
+
+## Acknowledgment
+
+Baseado em https://github.com/acheong08/EdgeGPT
+
 
 
   
