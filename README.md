@@ -4,9 +4,9 @@
 
 
 
-### Requirements
+## Requirements
 
-
+- python 3.8+
 - Seguintes cookies de navegador adicionados ao arquivo ```secret.py```:
   - Cookie ```_U``` do bing.com. Uma conta da Microsoft com acesso antecipado a https://bing.com/chat é obrigatório.
   - Cookie ```xf_user``` de usuario do furum.
@@ -21,6 +21,13 @@
   - faça o login em bing.com ou o forum.
   - Abra a extensão
   - clique no cookie citado acima e copie o ```Value```
+
+## Configure o sub forum:
+
+Em ```secret.py``` adicione o endereço do sub forúm desejado.
+
+
+
   
   
       
