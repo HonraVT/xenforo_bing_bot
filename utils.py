@@ -25,5 +25,5 @@ def add_period(text):
     return text + '.' if not (text.endswith('.') or text.endswith('?')) else text
 
 
-def remove_reference_simbols(text):
+def remove_reference_symbols(text):
     return re.sub(r'\[[^]]*]', '', text)
