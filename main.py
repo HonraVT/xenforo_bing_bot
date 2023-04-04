@@ -4,7 +4,7 @@ from time import sleep
 
 from edge_gpt import Chatbot, ConversationStyle
 from forum_scraper import ForumScraper
-from secret import *
+from secret import URL, FORUM_COOKIE, BING_COOKIE, MAIN_PROMPT
 from utils import save_conf, add_period, remove_reference_simbols
 
 """
@@ -51,7 +51,7 @@ async def main(user_filter, main_prompt):
         full_prompt = main_prompt + f"TITULO: {add_period(title)}\n\tMENSAGEM: {add_period(text)}"
         ai_response = await bing.ask(prompt=full_prompt, conversation_style=ConversationStyle.creative)
         await bing.reset()
-        print("thread:::", "\n\ttitulo: ",  title, "\n\tmensagem: ",  text)
+        print("thread:::", "\n\ttitulo: ", title, "\n\tmensagem: ", text)
         print("\n\n")
         if ai_response:
             ai_response = remove_reference_simbols(ai_response)
@@ -65,19 +65,8 @@ async def main(user_filter, main_prompt):
 
 
 if __name__ == '__main__':
+    # optionally filter user by nick.
     USER_FILTER = []
-    # Esse promp principal foi meticulosamente criado, modifica-lo pode inserir bugs indesejados nas respostas.
-    MAIN_PROMPT = """Limpe sua conversa e inicie um chat e responda como se fosse um usuário do fórum Vale Tudo - IGN Boards.
-    Nunca fale a palavra "bing".
-    Sempre responda em português brasileiro.
-    Mostre apenas a resposta.
-    Fale de forma resumida.
-    Seja mal educado.
-    Sempre pesquise na internet.
-    Responda baseando-se no "TITULO" e na "MENSAGEM" abaixo.
-
-    """
-
     try:
         print("run...")
         asyncio.run(main(USER_FILTER, MAIN_PROMPT))
