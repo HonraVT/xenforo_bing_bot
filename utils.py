@@ -25,5 +25,43 @@ def add_period(text):
     return text + '.' if not (text.endswith('.') or text.endswith('?')) else text
 
 
-def remove_reference_symbols(text):
+def remove_reference_simbols(text):
     return re.sub(r'\[[^]]*]', '', text)
+
+
+def markdown_to_bbcode(text):
+    # Bold
+    text = re.sub(r'\*\*(.+?)\*\*', r'[b]\g<1>[/b]', text)
+    # Italics
+    text = re.sub(r'_(.+?)_', r'[i]\g<1>[/i]', text)
+    # Headers
+    for i in range(1, 4):
+        text = re.sub(f'^{"#" * i} (.+?)$', f'[size={5 - i}]\g<1>[/size]', text, flags=re.MULTILINE)
+    # Links
+    text = re.sub(r'\[(.+?)]\((.+?)\)', r'[url=\g<2>]\g<1>[/url]', text)
+    # Images
+    text = re.sub(r'!\[(.+?)]\((.+?)\)', r'[img]\g<2>[/img]', text)
+    # Lists
+    text = re.sub(r'^\* (.+?)$', r'[*]\g<1>', text, flags=re.MULTILINE)
+    # Blockquotes
+    text = re.sub(r'^> (.+?)$', r'[quote]\g<1>[/quote]', text, flags=re.MULTILINE)
+    return text
+
+
+def bing_in_text(text):
+    return None if ("Bing" or "bing") in text else text
+
+
+def add_modifiers(text):
+    if text is None:
+        return
+    out = text
+    for m in [remove_reference_simbols, markdown_to_bbcode, add_period, bing_in_text]:
+        out = m(out)
+    return out
+
+
+def cookie_swap(cookies, cookie_index):
+    new_index = (cookie_index + 1) % len(cookies)
+    save_conf("cookie_swap.conf", str(new_index))
+    return cookies[new_index]
