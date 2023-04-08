@@ -49,7 +49,7 @@ def markdown_to_bbcode(text):
 
 
 def bing_in_text(text):
-    return None if "Bing" or "bing" in text else text
+    return None if any(word in text for word in ["Bing", "bing"]) else text
 
 
 def add_modifiers(text):
