@@ -31,6 +31,8 @@ Erro ```NotAllowedToAccess``` significa que o cookie do bing expirou ou é invá
 
 Erro ```AuthenticationError``` significa que o cookie do forum expirou ou é inválido.
 
+Erro ```RequestThrottledError``` significa que a conta atingiu o máximo de solicitações por dia.
+
 ## Acknowledgment
 
 Baseado em https://github.com/acheong08/EdgeGPT
