@@ -8,13 +8,13 @@ from secret import URL, FORUM_COOKIE, BING_COOKIES, MAIN_PROMPT
 from utils import save_conf, add_period, add_modifiers, load_conf, cookie_swap
 
 
-cookie_index = int(load_conf("cookie_swap.conf"))
-
 fs = ForumScraper(URL, FORUM_COOKIE, warning_mgs=True)
-bing = Chatbot(BING_COOKIES[cookie_index], warning_mgs=True)
 
 
 async def main(user_filter, main_prompt):
+    cookie_index = int(load_conf("cookie_swap.conf"))
+    bing = Chatbot(BING_COOKIES[cookie_index], warning_mgs=True)
+
     threads = fs.get_thread_data(user_filter)
     print("a responder:", len(threads))
 
@@ -28,7 +28,7 @@ async def main(user_filter, main_prompt):
                 print("[!] Request Is Throttled, Your Account Hit Max Requests Per Day, Exiting Program...")
                 quit()
             print("[!] Request Is Throttled, Trying Change Cookies.")
-            await bing.reset(cookie_swap(BING_COOKIES, cookie_index))
+            cookie_swap(BING_COOKIES, cookie_index)
             raise
         await bing.reset()
         print("thread:::", "\n\ttitulo: ", title, "\n\tmensagem: ", text)
@@ -53,5 +53,5 @@ if __name__ == '__main__':
     except Exception as err:
         print("final error", err)
         print("final error full", traceback.format_exc())
-        sleep(50)
+        sleep(5)
         asyncio.run(main(USER_FILTER, MAIN_PROMPT))
