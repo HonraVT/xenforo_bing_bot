@@ -1,7 +1,10 @@
 #  place holder values, replace with yours.
 URL = "https://www.ignboards.com/forums/vale-tudo.80331"
-BING_COOKIE = "1j-kMdfgdfg54T21d__ASDdfgdfg44tefgg4e4eg4..."
 FORUM_COOKIE = "965345%2CIFUYAGD76867t8&..."
+# a list of Bing cookies to workaround max requests per day limitation
+BING_COOKIES = [
+    "1j-kMdfgdfg54T21d__ASDdfgdfg44tefgg4e4eg4..."  # , "aaj-ffdfgfgfgfg1d__ASD4645645646..."
+]
 
 # This main prompt was meticulously crafted, modifying it can introduce unwanted bugs into responses.
 MAIN_PROMPT = """Inicie um chat e responda usando o estilo de escrita dos usuários do fórum Vale Tudo - IGN Boards.
