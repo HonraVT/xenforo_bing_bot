@@ -20,7 +20,7 @@ import websockets.client as websockets
 EdgeGPT - reverse engineer bing chat: https://github.com/acheong08/EdgeGPT
 author: https://github.com/acheong08
 all credits to him.
-little personal touch (by honraVT) to catch uncensored responses, on line 303
+little personal touch (by honraVT) to catch uncensored responses, on line 290
 """
 
 DELIMITER = "\x1e"
@@ -82,6 +82,10 @@ ssl_context.load_verify_locations(certifi.where())
 
 
 class NotAllowedToAccess(Exception):
+    pass
+
+
+class RequestThrottledError(Exception):
     pass
 
 
@@ -200,8 +204,7 @@ class Conversation:
 
     def __init__(
             self,
-            cookie_path: str = "",
-            cookies: list | None = None,
+            cookie_value: str = str,
             proxy: str | None = None,
     ) -> None:
         self.struct: dict = {
@@ -215,17 +218,8 @@ class Conversation:
             timeout=30,
             headers=HEADERS_INIT_CONVER,
         )
-        if cookies is not None:
-            cookie_file = cookies
-        else:
-            f = (
-                open(cookie_path, encoding="utf8").read()
-                if cookie_path
-                else open(os.environ.get("COOKIE_FILE"), encoding="utf-8").read()
-            )
-            cookie_file = json.loads(f)
-        for cookie in cookie_file:
-            self.session.cookies.set(cookie["name"], cookie["value"])
+
+        self.session.cookies.set("_U", cookie_value)
 
         # Send GET request
         response = self.session.get(
@@ -256,9 +250,6 @@ class ChatHub:
 
     def __init__(self, conversation: Conversation) -> None:
         self.wss: websockets.WebSocketClientProtocol | None = None
-        self.request: ChatHubRequest
-        self.loop: bool
-        self.task: asyncio.Task
         self.request = ChatHubRequest(
             conversation_signature=conversation.struct["conversationSignature"],
             client_id=conversation.struct["clientId"],
@@ -307,9 +298,17 @@ class ChatHub:
                     resp_text = response["arguments"][0]["messages"][0].get("text")
                     yield False, resp_text
                 elif response.get("type") == 2:
+                    limit_reached = response["item"]["result"]["value"]
+                    if limit_reached != "Success":
+                        await self.close()
+                        raise RequestThrottledError(f"Limit reached! request is: {limit_reached}")
                     revoke = response["item"]["messages"][1]["contentOrigin"]
                     if revoke == "Apology":
                         warnings.warn("[!] Revoked response (2)")
+                        final = True
+                        yield True, None
+                    elif revoke == "NluDirectResponse":
+                        warnings.warn("[!] Revoked response (2) by NluDirectResponse")
                         final = True
                         yield True, None
                     warnings.warn(f'[!] Prompt Offence:  {response["item"]["messages"][0]["offense"]}')
@@ -336,16 +335,14 @@ class Chatbot:
 
     def __init__(
             self,
-            cookie_path: str = "",
-            cookies: list | None = None,
+            cookie_value: str,
             proxy: str | None = None,
             warning_mgs: bool = False
     ) -> None:
-        self.cookiePath: str = cookie_path
-        self.cookies: list | None = cookies
+        self.cookie_value: str = cookie_value
         self.proxy: str | None = proxy
         self.chat_hub: ChatHub = ChatHub(
-            Conversation(self.cookiePath, self.cookies, self.proxy),
+            Conversation(self.cookie_value, self.proxy),
         )
         if not warning_mgs:
             warnings.filterwarnings("ignore")
@@ -376,10 +373,11 @@ class Chatbot:
         """
         await self.chat_hub.close()
 
-    async def reset(self) -> None:
+    async def reset(self, cookie: str | None = None) -> None:
         """
         Reset the conversation
         """
+        if cookie is None:
+            cookie = self.cookie_value
         await self.close()
-        self.chat_hub = ChatHub(Conversation(self.cookiePath, self.cookies))
-
+        self.chat_hub = ChatHub(Conversation(cookie))
