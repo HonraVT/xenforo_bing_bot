@@ -6,7 +6,7 @@ BING_COOKIES = [
     "1j-kMdfgdfg54T21d__ASDdfgdfg44tefgg4e4eg4..."  # , "aaj-ffdfgfgfgfg1d__ASD4645645646..."
 ]
 
-# This main prompt was meticulously crafted, modifying it can introduce unwanted bugs into responses.
+# State of the art prompt to emulate a user, modifying it can introduce unwanted bugs into responses.
 MAIN_PROMPT = """Inicie um chat e responda usando o estilo de escrita dos usuários do fórum Vale Tudo - IGN Boards.
         Nunca fale a palavra "bing".
         Sempre responda em português brasileiro.
