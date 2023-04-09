@@ -38,8 +38,9 @@ async def main(user_filter, main_prompt):
             print("ai_response raw:::", ai_response)
             sleep(20)
             fs.reply(thread_id, ai_response)
-            save_conf("last_read.conf", thread_id)
-            sleep(80)
+            sleep(70)
+        save_conf("last_read.conf", thread_id)
+        sleep(10)
     sleep(100)
     await main(user_filter, main_prompt)
 
