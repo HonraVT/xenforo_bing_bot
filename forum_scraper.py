@@ -4,8 +4,7 @@ import httpx
 from lxml.html import fromstring
 
 from utils import get_not_answered, load_conf
-
-from secret import *
+from read_midia import midia_context
 
 USER_AGENT = \
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
@@ -72,7 +71,8 @@ class ForumScraper:
         if res.status_code > 303:
             warnings.warn(f"[!] get_preview_text, error at forum request, code: {res.status_code}")
             return ""
-        return fromstring(res.json()["html"]["content"]).text_content().strip()
+        html = fromstring(res.json()["html"]["content"])
+        return html.text_content().strip() + midia_context(html)
 
     def get_thread_data(self, filter_user):
         first_page_threads = self.get_threads()
