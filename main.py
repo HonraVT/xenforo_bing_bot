@@ -1,10 +1,11 @@
 import asyncio
+import random
 import traceback
 from time import sleep
 
 from edge_gpt import Chatbot, ConversationStyle, RequestThrottledError
 from forum_scraper import ForumScraper
-from secret import URL, FORUM_COOKIE, BING_COOKIES, MAIN_PROMPT
+from secret import URL, FORUM_COOKIE, BING_COOKIES, MAIN_PROMPT, PERSONALITIES
 from utils import save_conf, add_period, add_modifiers, load_conf, cookie_swap
 
 
@@ -20,9 +21,14 @@ async def main(user_filter, main_prompt):
 
     for thread in threads:
         nick, thread_id, title, text = thread.values()
-        full_prompt = MAIN_PROMPT + f"\r\nTITULO: {add_period(title)}\nMENSAGEM: {add_period(text)}\nRESPOSTA:"
         try:
-            ai_response = await bing.ask(prompt=full_prompt, conversation_style=ConversationStyle.creative)
+            ai_response = await bing.ask(
+                prompt=MAIN_PROMPT.format(
+                    personality=random.choice(PERSONALITIES),
+                    titulo=add_period(title),
+                    mensagem=add_period(text)),
+                conversation_style=ConversationStyle.creative
+            )
         except RequestThrottledError:
             if len(BING_COOKIES) == 1:
                 print("[!] Request Is Throttled, Your Account Hit Max Requests Per Day, Exiting Program...")
