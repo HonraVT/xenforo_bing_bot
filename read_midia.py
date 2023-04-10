@@ -55,7 +55,9 @@ def midia_context(html):
         if m[1] == "src":
             if "youtube" in m[2]:
                 yt = get_youtube_video_title(m[2].split("embed/")[1])
-                return f'\ntítulo do video no youtube: {yt}'
+                if yt:
+                    return f"\ntítulo do video no youtube: {yt}"
+                break
             if "twitter" in m[2]:
                 twt = get_twitter_text(m[2][48:-5])
                 if twt:
