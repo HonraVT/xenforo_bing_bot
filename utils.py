@@ -26,7 +26,7 @@ def add_period(text):
 
 
 def remove_reference_simbols(text):
-    return re.sub(r'\[[^]]*]', '', text)
+    return re.sub(r'\[\^(\d+)\^]', '', text)
 
 
 def markdown_to_bbcode(text):
